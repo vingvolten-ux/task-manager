@@ -1,0 +1,50 @@
+.mana-field {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+    overflow: hidden;
+
+    z-index: -1;
+}
+
+.mana-particle {
+    position: absolute;
+    border-radius: 50%;
+
+    background: #6bb3ff;
+
+    box-shadow:
+        0 0 6px #6bb3ff,
+        0 0 12px #6bb3ff,
+        0 0 20px #6bb3ff;
+
+    opacity: 0.8;
+
+    animation: floatMana linear infinite;
+}
+
+@keyframes floatMana {
+
+    0% {
+        transform: translateY(110vh) translateX(0px);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(50vh) translateX(20px);
+    }
+
+    100% {
+        transform: translateY(-10vh) translateX(-20px);
+        opacity: 0;
+    }
+}

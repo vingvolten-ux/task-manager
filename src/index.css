@@ -1,0 +1,143 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  background-image: url('assets/04e6a42f6e161dcdc90eb066283e7b30.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  height: 100vh;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app {
+  position: center;
+  z-index: 1;
+  width: 400px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.task-input {
+  display: flex;
+  gap: 10px;
+}
+
+.task-input input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.task-input button {
+  padding: 10px;
+  border: none;
+  background: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.task-list {
+  margin-top: 20px;
+}
+
+.task-item {
+  background: #1e1e1e;
+  padding: 10px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 5px;
+}
+.task-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-input select,
+.task-input input,
+.task-input button {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.filters select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
+.task-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #334155;
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  animation: fadeIn 0.3s ease;
+}
+.task-item:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+button {
+  background: #3b82f6;
+  color: white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+input[type="checkbox"]:active {
+  transform: scale(1.4);
+}
+
+.task-item:has(span[style*="rgb(239, 68, 68)"]),
+.task-item:has(span[style*="#ef4444"]) {
+  border-left: 4px solid #ef4444;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #3b82f6;
+}
