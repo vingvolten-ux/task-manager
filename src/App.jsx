@@ -2,6 +2,10 @@ import { useState} from "react";
 import ManaParticles from "./components/ManaParticles";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [text, setText] = useState("");
   const [category, setCategory] = useState("General");
@@ -40,131 +44,183 @@ function App() {
     );
   };
 
+  const handleLogin = () => {
+  if (email === "admin@test.com" && password === "1234") {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoggedIn(true);
+      setIsLoading(false);
+    }, 1500); // 1.5s loading animation
+  } else {
+    alert("Invalid credentials");
+  }
+};
+
   return (
-    <>
-      <ManaParticles />
-      {/* MAIN APP */}
-      <div className="app">
-        <h1>Task Manager</h1>
+  <>
+    {isLoading ? (
+      /* LOADING SCREEN */
+      <div className="loading-screen">
+        <div className="loader"></div>
+        <p>Entering your workspace...</p>
+      </div>
+    ) : !isLoggedIn ? (
+      /* LOGIN PAGE */
+      <div className="login-container">
+        <h1>Login</h1>
 
-        <div className="task-input">
-          <input
-            type="text"
-            placeholder="Enter a task..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option>General</option>
-            <option>Work</option>
-            <option>School</option>
-            <option>Personal</option>
-          </select>
+        <br></br>
 
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-          />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-          <button onClick={addTask}>Add</button>
-        </div>
+        <button onClick={handleLogin}>Login</button>
+      </div>
+    ) : (
+      /* MAIN APP */
+      <>
+        <ManaParticles />
 
-        <div className="filters">
-          <select
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-          >
-            <option>All</option>
-            <option>General</option>
-            <option>Work</option>
-            <option>School</option>
-            <option>Personal</option>
-          </select>
+        <div className="app">
+          <h1>Task Manager</h1>
 
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-          >
-            <option>All</option>
-            <option>Completed</option>
-            <option>Active</option>
-          </select>
-        </div>
+          <button onClick={() => setIsLoggedIn(false)}>Logout</button>
 
-        <div className="task-list">
-          {[...tasks]
-            .filter((task) => {
-              const categoryMatch =
-                filterCategory === "All" ||
-                task.category === filterCategory;
+          <div className="task-input">
+            <input
+              type="text"
+              placeholder="Enter a task..."
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
 
-              const statusMatch =
-                filterStatus === "All" ||
-                (filterStatus === "Completed" && task.completed) ||
-                (filterStatus === "Active" && !task.completed);
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option>General</option>
+              <option>Work</option>
+              <option>School</option>
+              <option>Personal</option>
+            </select>
 
-              return categoryMatch && statusMatch;
-            })
-            .sort((a, b) =>
-              (a.dueDate || "").localeCompare(b.dueDate || "")
-            )
-            .map((task) => {
-              const today = new Date().toISOString().split("T")[0];
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+            />
 
-              const isOverdue =
-                task.dueDate &&
-                task.dueDate < today &&
-                !task.completed;
+            <button onClick={addTask}>Add</button>
+          </div>
 
-              return (
-                <div className="task-item" key={task.id}>
-                  <div className="task-left">
-                    <input
-                      type="checkbox"
-                      checked={task.completed}
-                      onChange={() => toggleTask(task.id)}
-                    />
+          <div className="filters">
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+            >
+              <option>All</option>
+              <option>General</option>
+              <option>Work</option>
+              <option>School</option>
+              <option>Personal</option>
+            </select>
 
-                    <div>
-                      <span
-                        style={{
-                          textDecoration: task.completed
-                            ? "line-through"
-                            : "none",
-                          color: isOverdue ? "#ef4444" : "white",
-                        }}
-                      >
-                        {task.text}
-                      </span>
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+            >
+              <option>All</option>
+              <option>Completed</option>
+              <option>Active</option>
+            </select>
+          </div>
 
-                      <div
-                        style={{
-                          fontSize: "12px",
-                          opacity: 0.7,
-                          color: isOverdue ? "#ef4444" : "white",
-                          textDecoration: task.completed
-                            ? "line-through"
-                            : "none",
-                        }}
-                      >
-                        {task.category} | {task.dueDate || "No date"}
+          <div className="task-list">
+            {[...tasks]
+              .filter((task) => {
+                const categoryMatch =
+                  filterCategory === "All" ||
+                  task.category === filterCategory;
+
+                const statusMatch =
+                  filterStatus === "All" ||
+                  (filterStatus === "Completed" && task.completed) ||
+                  (filterStatus === "Active" && !task.completed);
+
+                return categoryMatch && statusMatch;
+              })
+              .sort((a, b) =>
+                (a.dueDate || "").localeCompare(b.dueDate || "")
+              )
+              .map((task) => {
+                const today = new Date().toISOString().split("T")[0];
+
+                const isOverdue =
+                  task.dueDate &&
+                  task.dueDate < today &&
+                  !task.completed;
+
+                return (
+                  <div className="task-item" key={task.id}>
+                    <div className="task-left">
+                      <input
+                        type="checkbox"
+                        checked={task.completed}
+                        onChange={() => toggleTask(task.id)}
+                      />
+
+                      <div>
+                        <span
+                          style={{
+                            textDecoration: task.completed
+                              ? "line-through"
+                              : "none",
+                            color: isOverdue ? "#ef4444" : "white",
+                          }}
+                        >
+                          {task.text}
+                        </span>
+
+                        <div
+                          style={{
+                            fontSize: "12px",
+                            opacity: 0.7,
+                            color: isOverdue ? "#ef4444" : "white",
+                            textDecoration: task.completed
+                              ? "line-through"
+                              : "none",
+                          }}
+                        >
+                          {task.category} |{" "}
+                          {task.dueDate || "No date"}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <button onClick={() => deleteTask(task.id)}>❌</button>
-                </div>
-              );
-            })}
+                    <button onClick={() => deleteTask(task.id)}>
+                      ❌
+                    </button>
+                  </div>
+                );
+              })}
+          </div>
         </div>
-      </div>
-    </>
-  );
+      </>
+    )}
+  </>
+);
 }
 
 export default App;
