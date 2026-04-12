@@ -44,16 +44,31 @@ function App() {
     );
   };
 
-  const handleLogin = () => {
-  if (email === "admin@test.com" && password === "1234") {
-    setIsLoading(true);
+  const handleLogin = async () => {
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    setTimeout(() => {
+    const data = await res.json();
+
+    if (res.ok) {
+      console.log("TOKEN:", data.token);
+
+      // save token
+      localStorage.setItem("token", data.token);
+
       setIsLoggedIn(true);
-      setIsLoading(false);
-    }, 1500); // 1.5s loading animation
-  } else {
-    alert("Invalid credentials");
+    } else {
+      alert(data.error || "Login failed");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
   }
 };
 
