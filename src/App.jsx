@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState, useEffect } from "react";
 import ManaParticles from "./components/ManaParticles";
 
 function App() {
@@ -6,6 +6,7 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const [tasks, setTasks] = useState([]);
   const [text, setText] = useState("");
   const [category, setCategory] = useState("General");
@@ -13,6 +14,45 @@ function App() {
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterStatus, setFilterStatus] = useState("Active");
 
+   useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    setIsLoggedIn(true);
+  }
+}, []);
+
+  const handleLogin = async () => {
+  setIsLoading(true);
+
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      localStorage.setItem("token", data.token);
+
+      // Optional delay for loading effect
+      setTimeout(() => {
+        setIsLoggedIn(true);
+        setIsLoading(false);
+      }, 800);
+    } else {
+      alert(data.error || "Login failed");
+      setIsLoading(false);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+    setIsLoading(false);
+  }
+};
 
   const addTask = () => {
     if (text.trim() === "") return;
@@ -44,34 +84,6 @@ function App() {
     );
   };
 
-  const handleLogin = async () => {
-  try {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      console.log("TOKEN:", data.token);
-
-      // save token
-      localStorage.setItem("token", data.token);
-
-      setIsLoggedIn(true);
-    } else {
-      alert(data.error || "Login failed");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Server error");
-  }
-};
-
   return (
   <>
     {isLoading ? (
@@ -92,7 +104,7 @@ function App() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <br></br>
+        <br />
 
         <input
           type="password"
@@ -111,7 +123,11 @@ function App() {
         <div className="app">
           <h1>Task Manager</h1>
 
-          <button onClick={() => setIsLoggedIn(false)}>Logout</button>
+          <button
+            onClick={() => {
+            localStorage.removeItem("token");
+            setIsLoggedIn(false);
+          }}>Logout</button>
 
           <div className="task-input">
             <input
