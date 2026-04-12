@@ -4,15 +4,13 @@ const jwt = require("jsonwebtoken");
 const db = require("../db"); // ✅ FIXED (IMPORTANT)
 
 const router = express.Router();
-
 // ✅ REGISTER
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
-
   // Basic validation
-  if (!email || !password) {
-    return res.status(400).json({ error: "Email and password required" });
-  }
+  if (!email?.trim() || !password?.trim()) {
+  return res.status(400).json({ error: "Email and password required" });
+}
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,15 +30,13 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ error: "Registration failed" });
   }
 });
-
 // ✅ LOGIN
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
-
   // Basic validation
-  if (!email || !password) {
-    return res.status(400).json({ error: "Email and password required" });
-  }
+  if (!email?.trim() || !password?.trim()) {
+  return res.status(400).json({ error: "Email and password required" });
+}
 
   db.get(
     "SELECT * FROM users WHERE email = ?",
