@@ -1,3 +1,12 @@
+import cors from "cors";
+
+app.use(cors({
+  origin: "http://localhost:3000", // Allow requests from this origin
+}));
+
+import dotenv from "dotenv";
+dotenv.config();
+
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
