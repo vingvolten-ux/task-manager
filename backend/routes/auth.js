@@ -1,18 +1,19 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const db = require("../db"); // ✅ correct
+const db = require("../db");
 
 const router = express.Router();
 
-
-// ✅ REGISTER
+// REGISTER
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
 
-  // validation
+  // Validation
   if (!email?.trim() || !password?.trim()) {
-    return res.status(400).json({ error: "Email and password required" });
+    return res.status(400).json({
+      error: "Email and password required",
+    });
   }
 
   try {
@@ -20,60 +21,71 @@ router.post("/register", async (req, res) => {
 
     db.run(
       "INSERT INTO users (email, password) VALUES (?, ?)",
-      [email, hashedPassword],
+      [email.trim(), hashedPassword],
       function (err) {
         if (err) {
-          return res.status(400).json({ error: "User already exists" });
+          return res.status(400).json({
+            error: "User already exists",
+          });
         }
 
-        return res.json({ message: "User registered successfully" });
+        return res.json({
+          message: "User registered successfully",
+        });
       }
     );
-  } catch (err) {
-    return res.status(500).json({ error: "Registration failed" });
+  } catch (error) {
+    return res.status(500).json({
+      error: "Registration failed",
+    });
   }
 });
 
-
-// ✅ LOGIN
+//LOGIN
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  // validation
+  // Validation
   if (!email?.trim() || !password?.trim()) {
-    return res.status(400).json({ error: "Email and password required" });
+    return res.status(400).json({
+      error: "Email and password required",
+    });
   }
 
   db.get(
     "SELECT * FROM users WHERE email = ?",
-    [email],
-    (err, user) => {
+    [email.trim()],
+    async (err, user) => {
       if (err) {
-        return res.status(500).json({ error: "Database error" });
+        return res.status(500).json({
+          error: "Database error",
+        });
       }
 
       if (!user) {
-        return res.status(400).json({ error: "User not found" });
+        return res.status(400).json({
+          error: "User not found",
+        });
       }
 
-      // ⚠️ bcrypt compare WITHOUT async callback
-      bcrypt.compare(password, user.password, (err, isMatch) => {
-        if (err) {
-          return res.status(500).json({ error: "Compare error" });
-        }
+      const isMatch = await bcrypt.compare(password, user.password);
 
-        if (!isMatch) {
-          return res.status(400).json({ error: "Invalid password" });
-        }
+      if (!isMatch) {
+        return res.status(400).json({
+          error: "Invalid password",
+        });
+      }
 
-        const token = jwt.sign(
-          { id: user.id, email: user.email },
-          process.env.JWT_SECRET,
-          { expiresIn: "1h" }
-        );
+      const token = jwt.sign(
+        {
+          id: user.id,
+          email: user.email,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
 
-        return res.json({ token });
-      });
+      return res.json({ token });
     }
   );
 });

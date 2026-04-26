@@ -17,4 +17,27 @@ db.run(`
   )
 `);
 
+db.run(`
+  CREATE TABLE IF NOT EXISTS tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER,
+    text TEXT,
+    category TEXT,
+    dueDate TEXT,
+    completed INTEGER DEFAULT 0,
+    FOREIGN KEY (userId) REFERENCES users(id)
+  )
+`);
+
+db.run(`
+CREATE TABLE IF NOT EXISTS tasks (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  userId INTEGER,
+  text TEXT,
+  category TEXT,
+  dueDate TEXT,
+  completed INTEGER DEFAULT 0
+)
+`);
+
 module.exports = db;

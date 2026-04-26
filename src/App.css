@@ -253,3 +253,91 @@
     transform: translateY(0);
   }
 }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #0f172a, #111827, #1e293b);
+  color: white;
+}
+
+.app {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 42px;
+  margin-bottom: 30px;
+}
+
+.task-input,
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+input,
+select,
+button {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+}
+
+input,
+select {
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+
+button {
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  background: #1d4ed8;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.task-item {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(8px);
+  padding: 18px;
+  border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-item:hover {
+  transform: scale(1.01);
+  transition: 0.2s;
+}
+
+.overdue {
+  border-left: 4px solid #ef4444;
+}
+
+.login-container {
+  max-width: 400px;
+  margin: 120px auto;
+  padding: 30px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+}

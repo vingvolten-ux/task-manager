@@ -11,247 +11,299 @@ function App() {
   const [text, setText] = useState("");
   const [category, setCategory] = useState("General");
   const [dueDate, setDueDate] = useState("");
-  const [filterCategory, setFilterCategory] = useState("All");
-  const [filterStatus, setFilterStatus] = useState("Active");
 
-   useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    setIsLoggedIn(true);
-  }
-}, []);
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState("");
+  const [editDate, setEditDate] = useState("");
+  const [editCategory, setEditCategory] = useState("General");
+
+  // Auto login
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+      fetchTasks(token);
+    }
+  }, []);
+
+  const fetchTasks = async (token) => {
+    try {
+      const res = await fetch("http://localhost:5000/api/tasks", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (res.ok) setTasks(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleLogin = async () => {
-  setIsLoading(true);
+    setIsLoading(true);
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-  try {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+      const data = await res.json();
 
-    const data = await res.json();
-
-    if (res.ok) {
-      localStorage.setItem("token", data.token);
-
-      // Optional delay for loading effect
-      setTimeout(() => {
-        setIsLoggedIn(true);
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        setTimeout(() => {
+          setIsLoggedIn(true);
+          fetchTasks(data.token);
+          setIsLoading(false);
+        }, 800);
+      } else {
+        alert(data.error || "Login failed");
         setIsLoading(false);
-      }, 800);
-    } else {
-      alert(data.error || "Login failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server error");
       setIsLoading(false);
     }
-  } catch (err) {
-    console.error(err);
-    alert("Server error");
-    setIsLoading(false);
-  }
-};
+  };
 
-  const addTask = () => {
+  const addTask = async () => {
     if (text.trim() === "") return;
+    const token = localStorage.getItem("token");
 
-    const newTask = {
-      id: Date.now(),
-      text,
-      category,
-      dueDate,
-      completed: false,
-    };
+    try {
+      const res = await fetch("http://localhost:5000/api/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ text, category, dueDate }),
+      });
 
-    setTasks([...tasks, newTask]);
+      const data = await res.json();
 
-    setText("");
-    setCategory("General");
-    setDueDate("");
+      if (res.ok) {
+        setTasks([...tasks, data]);
+        setText("");
+        setCategory("General");
+        setDueDate("");
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const deleteTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
+  const deleteTask = async (id) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      await fetch(`http://localhost:5000/api/tasks/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setTasks(tasks.filter((task) => task.id !== id));
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const toggleTask = (id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
+  const toggleTask = async (id) => {
+    const token = localStorage.getItem("token");
+    const task = tasks.find((t) => t.id === id);
+
+    try {
+      await fetch(`http://localhost:5000/api/tasks/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ completed: !task.completed }),
+      });
+
+      setTasks(
+        tasks.map((t) =>
+          t.id === id ? { ...t, completed: !t.completed } : t
+        )
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const saveEdit = async (id) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      await fetch(`http://localhost:5000/api/tasks/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          text: editText,
+          dueDate: editDate,
+          category: editCategory,
+        }),
+      });
+
+      setTasks(
+        tasks.map((task) =>
+          task.id === id
+            ? { ...task, text: editText, dueDate: editDate, category: editCategory }
+            : task
+        )
+      );
+
+      setEditingId(null);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
-  <>
-    {isLoading ? (
-      /* LOADING SCREEN */
-      <div className="loading-screen">
-        <div className="loader"></div>
-        <p>Entering your workspace...</p>
-      </div>
-    ) : !isLoggedIn ? (
-      /* LOGIN PAGE */
-      <div className="login-container">
-        <h1>Login</h1>
+    <>
+      {isLoading ? (
+        <div className="loading-screen">
+          <div className="loader"></div>
+          <p>Entering your workspace...</p>
+        </div>
+      ) : !isLoggedIn ? (
+        <div className="login-container">
+          <h1>Login</h1>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <br />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <button onClick={handleLogin}>Login</button>
+        </div>
+      ) : (
+        <>
+          <ManaParticles />
 
-        <button onClick={handleLogin}>Login</button>
-      </div>
-    ) : (
-      /* MAIN APP */
-      <>
-        <ManaParticles />
+          <div className="app">
+            <h1>Task Manager</h1>
 
-        <div className="app">
-          <h1>Task Manager</h1>
-
-          <button
-            onClick={() => {
-            localStorage.removeItem("token");
-            setIsLoggedIn(false);
-          }}>Logout</button>
-
-          <div className="task-input">
-            <input
-              type="text"
-              placeholder="Enter a task..."
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-            />
-
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
+            <button
+              onClick={() => {
+                localStorage.removeItem("token");
+                setIsLoggedIn(false);
+              }}
             >
-              <option>General</option>
-              <option>Work</option>
-              <option>School</option>
-              <option>Personal</option>
-            </select>
+              Logout
+            </button>
 
-            <input
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-            />
+            {/* Add Task */}
+            <div className="task-input">
+              <input
+                type="text"
+                placeholder="Enter a task..."
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+              />
 
-            <button onClick={addTask}>Add</button>
-          </div>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option>General</option>
+                <option>Work</option>
+                <option>School</option>
+                <option>Personal</option>
+              </select>
 
-          <div className="filters">
-            <select
-              value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value)}
-            >
-              <option>All</option>
-              <option>General</option>
-              <option>Work</option>
-              <option>School</option>
-              <option>Personal</option>
-            </select>
+              <input
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+              />
 
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-            >
-              <option>All</option>
-              <option>Completed</option>
-              <option>Active</option>
-            </select>
-          </div>
+              <button onClick={addTask}>Add</button>
+            </div>
 
-          <div className="task-list">
-            {[...tasks]
-              .filter((task) => {
-                const categoryMatch =
-                  filterCategory === "All" ||
-                  task.category === filterCategory;
-
-                const statusMatch =
-                  filterStatus === "All" ||
-                  (filterStatus === "Completed" && task.completed) ||
-                  (filterStatus === "Active" && !task.completed);
-
-                return categoryMatch && statusMatch;
-              })
-              .sort((a, b) =>
-                (a.dueDate || "").localeCompare(b.dueDate || "")
-              )
-              .map((task) => {
-                const today = new Date().toISOString().split("T")[0];
-
-                const isOverdue =
-                  task.dueDate &&
-                  task.dueDate < today &&
-                  !task.completed;
-
-                return (
-                  <div className="task-item" key={task.id}>
-                    <div className="task-left">
+            {/* Task List */}
+            <div className="task-list">
+              {tasks.map((task) => (
+                <div key={task.id} className="task">
+                  {editingId === task.id ? (
+                    <>
                       <input
-                        type="checkbox"
-                        checked={task.completed}
-                        onChange={() => toggleTask(task.id)}
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
                       />
 
+                      <input
+                        type="date"
+                        value={editDate}
+                        onChange={(e) => setEditDate(e.target.value)}
+                      />
+
+                      <select
+                        value={editCategory}
+                        onChange={(e) => setEditCategory(e.target.value)}
+                      >
+                        <option>General</option>
+                        <option>Work</option>
+                        <option>School</option>
+                        <option>Personal</option>
+                      </select>
+
+                      <button onClick={() => saveEdit(task.id)}>Save</button>
+                    </>
+                  ) : (
+                    <>
+                      <span
+                        onClick={() => toggleTask(task.id)}
+                        style={{
+                          textDecoration: task.completed ? "line-through" : "none",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {task.text}
+                      </span>
+
                       <div>
-                        <span
-                          style={{
-                            textDecoration: task.completed
-                              ? "line-through"
-                              : "none",
-                            color: isOverdue ? "#ef4444" : "white",
-                          }}
-                        >
-                          {task.text}
-                        </span>
-
-                        <div
-                          style={{
-                            fontSize: "12px",
-                            opacity: 0.7,
-                            color: isOverdue ? "#ef4444" : "white",
-                            textDecoration: task.completed
-                              ? "line-through"
-                              : "none",
-                          }}
-                        >
-                          {task.category} |{" "}
-                          {task.dueDate || "No date"}
-                        </div>
+                        {task.category} | {task.dueDate || "No date"}
                       </div>
-                    </div>
 
-                    <button onClick={() => deleteTask(task.id)}>
-                      ❌
-                    </button>
-                  </div>
-                );
-              })}
+                      <button
+                        onClick={() => {
+                          setEditingId(task.id);
+                          setEditText(task.text);
+                          setEditDate(task.dueDate);
+                          setEditCategory(task.category);
+                        }}
+                      >
+                        Edit
+                      </button>
+
+                      <button onClick={() => deleteTask(task.id)}>
+                        Delete
+                      </button>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </>
-    )}
-  </>
-);
+        </>
+      )}
+    </>
+  );
 }
 
 export default App;
