@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ManaParticles from "../components/ManaParticles";
 
 function AddItem() {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ function AddItem() {
 
   return (
     <div className="app">
+        <ManaParticles />
       <h1>Add New Task</h1>
 
       <div className="task-input">

@@ -9,6 +9,7 @@ function Navbar() {
   };
 
   return (
+
     <nav className="navbar">
       <div className="nav-logo">Task Manager</div>
 

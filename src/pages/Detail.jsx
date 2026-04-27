@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import ManaParticles from "../components/ManaParticles";
 
 function Detail() {
   const { id } = useParams();
@@ -74,6 +75,7 @@ function Detail() {
 
   return (
     <div className="app">
+      <ManaParticles />
       <h1>Task Detail</h1>
 
       <div className="task-input">

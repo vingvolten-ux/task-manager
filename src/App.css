@@ -259,6 +259,7 @@ body {
   font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #0f172a, #111827, #1e293b);
   color: white;
+  padding-top: 60px;
 }
 
 .app {
@@ -340,4 +341,55 @@ button:hover {
   border-radius: 18px;
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(10px);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 30px;
+  background: rgba(15, 15, 20, 0.9);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+}
+
+.nav-logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+}
+
+.nav-links {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: yellow;
+}
+
+.logout-btn {
+  background: #ef4444;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  opacity: 0.85;
 }
