@@ -1,7 +1,7 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const db = require("../db");
+import express from "express";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import db from "../db.js";
 
 const router = express.Router();
 
@@ -9,7 +9,6 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
 
-  // Validation
   if (!email?.trim() || !password?.trim()) {
     return res.status(400).json({
       error: "Email and password required",
@@ -34,18 +33,17 @@ router.post("/register", async (req, res) => {
         });
       }
     );
-  } catch (error) {
+  } catch {
     return res.status(500).json({
       error: "Registration failed",
     });
   }
 });
 
-//LOGIN
+// LOGIN
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  // Validation
   if (!email?.trim() || !password?.trim()) {
     return res.status(400).json({
       error: "Email and password required",
@@ -56,31 +54,17 @@ router.post("/login", (req, res) => {
     "SELECT * FROM users WHERE email = ?",
     [email.trim()],
     async (err, user) => {
-      if (err) {
-        return res.status(500).json({
-          error: "Database error",
-        });
-      }
-
-      if (!user) {
-        return res.status(400).json({
-          error: "User not found",
-        });
-      }
+      if (err) return res.status(500).json({ error: "Database error" });
+      if (!user) return res.status(400).json({ error: "User not found" });
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res.status(400).json({
-          error: "Invalid password",
-        });
+        return res.status(400).json({ error: "Invalid password" });
       }
 
       const token = jwt.sign(
-        {
-          id: user.id,
-          email: user.email,
-        },
+        { id: user.id, email: user.email },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
@@ -90,4 +74,4 @@ router.post("/login", (req, res) => {
   );
 });
 
-module.exports = router;
+export default router;

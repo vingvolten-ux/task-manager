@@ -1,258 +1,6 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
-
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-}
-
-.hero {
-  position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
-}
-
-#center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
-}
-
-#next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
-
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
-}
-
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
-}
-
-.ticks {
-  position: relative;
-  width: 100%;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
-  }
-
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
-  }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
-  }
-}
-
-.login-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-
-  background: rgba(15, 23, 42, 0.95);
-}
-
-.login-container input {
-  padding: 10px;
-  width: 250px;
-  border-radius: 8px;
-  border: none;
-}
-
-.login-container button {
-  padding: 10px 20px;
-  border-radius: 8px;
-  background: #38bdf8;
-  border: none;
-  cursor: pointer;
-}
-
-.loading-screen {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-
-  background: #0f172a;
-  color: white;
-}
-
-/* Spinner */
-.loader {
-  width: 50px;
-  height: 50px;
-  border: 4px solid #334155;
-  border-top: 4px solid #38bdf8;
-  border-radius: 50%;
-
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-.loading-screen,
-.login-container,
-.app {
-  animation: fadeIn 0.4s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* =========================
+   GLOBAL
+========================= */
 
 body {
   margin: 0;
@@ -266,6 +14,7 @@ body {
   max-width: 900px;
   margin: auto;
   padding: 30px;
+  animation: fadeIn 0.4s ease;
 }
 
 h1 {
@@ -274,13 +23,30 @@ h1 {
   margin-bottom: 30px;
 }
 
-.task-input,
-.filters {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   BUTTONS / INPUTS
+========================= */
 
 input,
 select,
@@ -293,7 +59,7 @@ button {
 
 input,
 select {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
   color: white;
 }
 
@@ -309,6 +75,18 @@ button:hover {
   background: #1d4ed8;
 }
 
+/* =========================
+   TASK UI
+========================= */
+
+.task-input,
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
 .task-list {
   display: flex;
   flex-direction: column;
@@ -316,80 +94,125 @@ button:hover {
 }
 
 .task-item {
-  background: rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(8px);
   padding: 18px;
   border-radius: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: 0.2s;
 }
 
 .task-item:hover {
   transform: scale(1.01);
-  transition: 0.2s;
 }
 
 .overdue {
   border-left: 4px solid #ef4444;
 }
 
-.login-container {
-  max-width: 400px;
-  margin: 120px auto;
-  padding: 30px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
-}
+/* =========================
+   NAVBAR (CLEANED)
+========================= */
 
 .navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 30px;
-  background: rgba(15, 15, 20, 0.9);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(8px);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
 
+  padding: 18px 40px;
+
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(12px);
+
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .nav-logo {
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 600;
   color: white;
 }
 
 .nav-links {
   display: flex;
-  gap: 18px;
+  gap: 28px;
   align-items: center;
 }
 
 .nav-links a {
-  color: white;
+  color: #aaa;
   text-decoration: none;
-  transition: 0.3s;
+  font-size: 15px;
+  transition: 0.25s;
 }
 
 .nav-links a:hover {
-  color: yellow;
+  color: white;
+}
+
+.nav-links a.active {
+  color: #38bdf8;
 }
 
 .logout-btn {
   background: #ef4444;
   border: none;
-  color: white;
   padding: 8px 14px;
   border-radius: 8px;
+  color: white;
   cursor: pointer;
 }
 
-.logout-btn:hover {
-  opacity: 0.85;
+/*LOGIN / LOADING*/
+
+.login-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+
+  background: rgba(15, 23, 42, 0.95);
+  animation: fadeIn 0.4s ease;
+}
+
+.login-container input {
+  width: 250px;
+}
+
+.login-container button {
+  background: #38bdf8;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+.loading-screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+
+  background: #0f172a;
+  color: white;
+  animation: fadeIn 0.4s ease;
+}
+
+/* Spinner */
+.loader {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #334155;
+  border-top: 4px solid #38bdf8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }

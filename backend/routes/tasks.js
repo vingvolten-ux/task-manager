@@ -1,6 +1,6 @@
-const express = require("express");
-const jwt = require("jsonwebtoken");
-const db = require("../db");
+import express from "express";
+import jwt from "jsonwebtoken";
+import db from "../db.js";
 
 const router = express.Router();
 
@@ -29,7 +29,6 @@ router.get("/", verifyToken, (req, res) => {
     [req.user.id],
     (err, rows) => {
       if (err) return res.status(500).json({ error: "DB error" });
-
       res.json(rows);
     }
   );
@@ -56,20 +55,19 @@ router.post("/", verifyToken, (req, res) => {
   );
 });
 
-// DELETE task
+// DELETE
 router.delete("/:id", verifyToken, (req, res) => {
   db.run(
     "DELETE FROM tasks WHERE id = ? AND userId = ?",
     [req.params.id, req.user.id],
     function (err) {
       if (err) return res.status(500).json({ error: "Delete failed" });
-
       res.json({ message: "Task deleted" });
     }
   );
 });
 
-// TOGGLE task
+// TOGGLE
 router.put("/:id", verifyToken, (req, res) => {
   const { completed } = req.body;
 
@@ -78,12 +76,12 @@ router.put("/:id", verifyToken, (req, res) => {
     [completed ? 1 : 0, req.params.id, req.user.id],
     function (err) {
       if (err) return res.status(500).json({ error: "Update failed" });
-
       res.json({ message: "Task updated" });
     }
   );
 });
 
+// EDIT
 router.patch("/:id", verifyToken, (req, res) => {
   const { text, dueDate, category } = req.body;
 
@@ -91,13 +89,10 @@ router.patch("/:id", verifyToken, (req, res) => {
     "UPDATE tasks SET text = ?, dueDate = ?, category = ? WHERE id = ? AND userId = ?",
     [text, dueDate, category, req.params.id, req.user.id],
     function (err) {
-      if (err) {
-        return res.status(500).json({ error: "Edit failed" });
-      }
-
+      if (err) return res.status(500).json({ error: "Edit failed" });
       res.json({ message: "Task updated" });
     }
   );
 });
 
-module.exports = router;
+export default router;

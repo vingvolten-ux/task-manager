@@ -1,6 +1,8 @@
-const sqlite3 = require("sqlite3").verbose();
+import sqlite3 from "sqlite3";
 
-const db = new sqlite3.Database("./database.db", (err) => {
+const sqlite = sqlite3.verbose();
+
+const db = new sqlite.Database("./database.db", (err) => {
   if (err) {
     console.error("DB Error:", err.message);
   } else {
@@ -17,6 +19,7 @@ db.run(`
   )
 `);
 
+// Create tasks table (ONLY ONCE — you had it twice ❌)
 db.run(`
   CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,15 +32,4 @@ db.run(`
   )
 `);
 
-db.run(`
-CREATE TABLE IF NOT EXISTS tasks (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  userId INTEGER,
-  text TEXT,
-  category TEXT,
-  dueDate TEXT,
-  completed INTEGER DEFAULT 0
-)
-`);
-
-module.exports = db;
+export default db;

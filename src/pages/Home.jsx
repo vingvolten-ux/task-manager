@@ -36,7 +36,8 @@ function Home() {
       <ManaParticles />
 
       <div className="login-container">
-        <h1>Task Manager</h1>
+        <h1>NIA</h1>
+        <p>Welcome back to your Neural Intelligence Assistant! Please login to your account to gain access to the full suite of features.</p>
 
         <input
           type="email"

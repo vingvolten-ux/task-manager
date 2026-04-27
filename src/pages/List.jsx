@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import ManaParticles from "../components/ManaParticles";
 
 function List() {
@@ -74,22 +73,8 @@ function List() {
 
   return (
     <div className="app">
-      <Navbar />
       <ManaParticles />
       <h1>Task List</h1>
-
-      <Link to="/add">
-        <button>Add Task</button>
-      </Link>
-
-      <button
-        onClick={() => {
-          localStorage.removeItem("token");
-          navigate("/");
-        }}
-      >
-        Logout
-      </button>
 
       <div className="task-list">
         {tasks.map((task) => (
