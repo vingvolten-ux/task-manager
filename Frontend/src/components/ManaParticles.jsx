@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import "./mana.css"
+import "./Mana.css"
 
 export default function ManaParticles() {
   const fieldRef = useRef(null)
