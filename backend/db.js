@@ -1,26 +1,18 @@
-import sqlite3 from "sqlite3";
+import Database from "better-sqlite3";
 
-const sqlite = sqlite3.verbose();
-
-const db = new sqlite.Database("./database.db", (err) => {
-  if (err) {
-    console.error("DB Error:", err.message);
-  } else {
-    console.log("Connected to SQLite database");
-  }
-});
+const db = new Database("./database.db");
 
 // Create users table
-db.run(`
+db.prepare(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT UNIQUE,
     password TEXT
   )
-`);
+`).run();
 
-// Create tasks table (ONLY ONCE — you had it twice ❌)
-db.run(`
+// Create tasks table
+db.prepare(`
   CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     userId INTEGER,
@@ -30,6 +22,8 @@ db.run(`
     completed INTEGER DEFAULT 0,
     FOREIGN KEY (userId) REFERENCES users(id)
   )
-`);
+`).run();
+
+console.log("Connected to SQLite database");
 
 export default db;
