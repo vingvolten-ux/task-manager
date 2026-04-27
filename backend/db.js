@@ -1,29 +1,13 @@
-import Database from "better-sqlite3";
+import pkg from "pg";
+const { Pool } = pkg;
 
-const db = new Database("./database.db");
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
 
-// Create users table
-db.prepare(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT UNIQUE,
-    password TEXT
-  )
-`).run();
+console.log("Connected to PostgreSQL database");
 
-// Create tasks table
-db.prepare(`
-  CREATE TABLE IF NOT EXISTS tasks (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    userId INTEGER,
-    text TEXT,
-    category TEXT,
-    dueDate TEXT,
-    completed INTEGER DEFAULT 0,
-    FOREIGN KEY (userId) REFERENCES users(id)
-  )
-`).run();
-
-console.log("Connected to SQLite database");
-
-export default db;
+export default pool;
