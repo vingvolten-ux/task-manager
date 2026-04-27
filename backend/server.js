@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-
-import db from "./db.js";
 import authRoutes from "./routes/auth.js";
 import taskRoutes from "./routes/tasks.js";
 
@@ -15,8 +13,9 @@ app.use(cors({
   origin: [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://your-frontend-url.vercel.app"
-  ]
+    "task-manager-e82e59amg-vingvolten-uxs-projects.vercel.app"
+  ],
+  credentials: true
 }));
 
 app.use(express.json());
