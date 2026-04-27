@@ -10,8 +10,13 @@ dotenv.config();
 
 const app = express();
 
+// deployed frontend + localhost
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://your-frontend-url.vercel.app"
+  ]
 }));
 
 app.use(express.json());
@@ -20,6 +25,9 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+//use Render's dynamic port
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
