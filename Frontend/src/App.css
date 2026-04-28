@@ -1,6 +1,4 @@
-/* =========================
-   GLOBAL
-========================= */
+/*GLOBAL*/
 
 body {
   margin: 0;
@@ -23,9 +21,7 @@ h1 {
   margin-bottom: 30px;
 }
 
-/* =========================
-   ANIMATIONS
-========================= */
+/*ANIMATIONS*/
 
 @keyframes spin {
   to {
@@ -44,9 +40,7 @@ h1 {
   }
 }
 
-/* =========================
-   BUTTONS / INPUTS
-========================= */
+/*BUTTONS / INPUT*/
 
 input,
 select,
@@ -75,9 +69,7 @@ button:hover {
   background: #1d4ed8;
 }
 
-/* =========================
-   TASK UI
-========================= */
+/*TASK UI */
 
 .task-input,
 .filters {
@@ -112,25 +104,21 @@ button:hover {
   border-left: 4px solid #ef4444;
 }
 
-/* =========================
-   NAVBAR (CLEANED)
-========================= */
+/*NAVBAR*/
 
 .navbar {
   position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   z-index: 1000;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   padding: 18px 40px;
-
   background: rgba(10, 10, 15, 0.85);
   backdrop-filter: blur(12px);
-
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
