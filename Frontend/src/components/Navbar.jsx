@@ -1,48 +1,25 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
-function Navbar() {
+export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const token = localStorage.getItem("token");
 
-  const logout = () => {
+  const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
   };
 
-  const links = [
-    { name: "Home", path: "/" },
-    { name: "List", path: "/list" },
-    { name: "Add Item", path: "/add" },
-  ];
+  if (!token) return null;
 
   return (
     <nav className="navbar">
-      {/* Logo */}
-      <div className="nav-logo">Task Manager</div>
-
-      {/* Links */}
+      <span className="nav-logo">⚡ NIA</span>
       <div className="nav-links">
-        {links.map((link) => {
-          const active = location.pathname === link.path;
-
-          return (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={active ? "active" : ""}
-            >
-              {link.name}
-            </Link>
-          );
-        })}
-
-        {/* Logout */}
-        <button onClick={logout} className="logout-btn">
-          Logout
-        </button>
+        <Link to="/list" className={location.pathname === "/list" ? "active" : ""}>Tasks</Link>
+        <Link to="/add" className={location.pathname === "/add" ? "active" : ""}>+ Add</Link>
+        <button className="logout-btn" onClick={handleLogout}>Logout</button>
       </div>
     </nav>
   );
 }
-
-export default Navbar;
