@@ -10,4 +10,6 @@ const pool = new Pool({
 
 console.log("Connected to PostgreSQL database");
 
+
+
 export default pool;
