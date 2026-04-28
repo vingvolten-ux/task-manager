@@ -1,6 +1,4 @@
-/* =========================
-   RESET & BASE
-========================= */
+/*RESET & BASE*/
 
 * {
   box-sizing: border-box;
@@ -19,9 +17,7 @@ body {
   color: white;
 }
 
-/* =========================
-   ANIMATIONS
-========================= */
+/*ANIMATIONS */
 
 @keyframes spin {
   to { transform: rotate(360deg); }
@@ -32,9 +28,7 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* =========================
-   NAVBAR
-========================= */
+/* NAVBAR*/
 
 .navbar {
   position: fixed;
@@ -115,9 +109,7 @@ h1 {
   font-weight: 700;
 }
 
-/* =========================
-   BUTTONS & INPUTS
-========================= */
+/* BUTTONS & INPUTS*/
 
 input,
 select,
@@ -167,9 +159,7 @@ select:focus {
   box-shadow: 0 0 0 2px #38bdf8;
 }
 
-/* =========================
-   TASK INPUT FORM
-========================= */
+/*TASK INPUT FORM*/
 
 .task-input {
   display: flex;
@@ -182,9 +172,7 @@ select:focus {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* =========================
-   TASK LIST
-========================= */
+/*TASK LIST*/
 
 .task-list {
   display: flex;
@@ -230,9 +218,7 @@ input[type="checkbox"] {
   flex-shrink: 0;
 }
 
-/* =========================
-   LOGIN / REGISTER
-========================= */
+/*LOGIN / REGISTER*/
 
 .login-container {
   min-height: 100vh;
@@ -284,9 +270,7 @@ input[type="checkbox"] {
   text-decoration: underline;
 }
 
-/* =========================
-   LOADING
-========================= */
+/*LOADING*/
 
 .loading-screen {
   min-height: 100vh;
@@ -308,9 +292,7 @@ input[type="checkbox"] {
   animation: spin 1s linear infinite;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/*RESPONSIVE*/
 
 @media (max-width: 600px) {
   .navbar {
