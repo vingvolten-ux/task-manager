@@ -16,9 +16,15 @@ export default function Navbar() {
     <nav className="navbar">
       <span className="nav-logo">⚡ NIA</span>
       <div className="nav-links">
-        <Link to="/list" className={location.pathname === "/list" ? "active" : ""}>Tasks</Link>
-        <Link to="/add" className={location.pathname === "/add" ? "active" : ""}>+ Add</Link>
-        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+        <Link to="/list" className={location.pathname === "/list" ? "active" : ""}>
+          Tasks
+        </Link>
+        <Link to="/add" className={location.pathname === "/add" ? "active" : ""}>
+          + Add
+        </Link>
+        <button className="logout-btn" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
     </nav>
   );
