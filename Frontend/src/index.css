@@ -1,3 +1,9 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: "Segoe UI", sans-serif;
   background-image: url('assets/task-manager-background.png');
@@ -5,11 +11,8 @@ body {
   background-position: center;
   background-attachment: fixed;
   background-repeat: no-repeat;
-  height: 100vh;
+  min-height: 100vh;
   color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .app {
