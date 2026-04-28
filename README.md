@@ -1,16 +1,140 @@
-# React + Vite
+NIA – Neural Intelligence Assistant (Task Manager)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Student Project – INFS 202 Midterm
 
-Currently, two official plugins are available:
+Project Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+NIA is a full-stack task management web application that allows users to register, log in, and manage their personal tasks. Tasks can be created, edited, deleted, and marked as complete.
 
-## React Compiler
+Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Frontend
+- React 19
+- React Router DOM v7
+- Vite
+- CSS (custom, responsive)
+- Framer Motion
+- Deployed on Vercel
 
-## Expanding the ESLint configuration
+Backend
+- Node.js
+- Express.js
+- PostgreSQL (via `pg`)
+- JWT Authentication
+- bcrypt password hashing
+- Deployed on Render
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Features
+
+- User registration and login (JWT-based auth)
+- Create, read, update, delete tasks
+- Mark tasks as complete/incomplete
+- Task categories and due dates
+- Overdue task highlighting
+- Responsive design (mobile, tablet, desktop)
+- Animated particle background
+
+Project Structure
+
+```
+task-manager/
+├── Frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx
+│   │   │   └── ManaParticles.jsx
+│   │   ├── pages/
+│   │   │   ├── Home.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── List.jsx
+│   │   │   ├── Detail.jsx
+│   │   │   └── AddItem.jsx
+│   │   ├── api.js
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   └── package.json
+└── backend/
+    ├── routes/
+    │   ├── auth.js
+    │   └── tasks.js
+    ├── db.js
+    ├── server.js
+    └── package.json
+```
+
+Setup Instructions
+
+Prerequisites
+- Node.js v18+
+- PostgreSQL database
+
+Backend Setup
+
+```bash
+cd backend
+npm install
+```
+
+Create a `.env` file:
+```
+DB_URL=your_postgresql_connection_string
+JWT_SECRET=your_secret_key
+PORT=5000
+```
+
+Run the database setup SQL:
+```sql
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tasks (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  text TEXT NOT NULL,
+  category VARCHAR(100) DEFAULT 'General',
+  due_date VARCHAR(50),
+  completed BOOLEAN DEFAULT false
+);
+```
+
+Start the backend:
+```bash
+npm start
+```
+
+Frontend Setup
+
+```bash
+cd Frontend
+npm install
+```
+
+Create a `.env` file:
+```
+VITE_API_URL=http://localhost:5000
+```
+
+Start the frontend:
+```bash
+npm run dev
+```
+
+ Live URL
+
+- Frontend: https://task-manager-d2fe.vercel.app
+- Backend API: https://task-manager-1-zlxf.onrender.com
+
+API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/auth/register | Register new user |
+| POST | /api/auth/login | Login user |
+| GET | /api/tasks | Get all tasks |
+| POST | /api/tasks | Create task |
+| PUT | /api/tasks/:id | Toggle complete |
+| PATCH | /api/tasks/:id | Edit task |
+| DELETE | /api/tasks/:id | Delete task |
