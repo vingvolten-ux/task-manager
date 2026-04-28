@@ -1,21 +1,22 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import ManaParticles from "../components/ManaParticles";
 import API_URL from "../api";
 
-function AddItem() {
+function Detail() {
+  const { id } = useParams();
   const navigate = useNavigate();
 
+  const [task, setTask] = useState(null);
   const [text, setText] = useState("");
   const [category, setCategory] = useState("General");
   const [dueDate, setDueDate] = useState("");
 
-  const addTask = async () => {
-    if (text.trim() === "") {
-      alert("Enter a task");
-      return;
-    }
+  useEffect(() => {
+    fetchTask();
+  }, []);
 
+  const fetchTask = async () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -25,40 +26,56 @@ function AddItem() {
 
     try {
       const res = await fetch(`${API_URL}/api/tasks`, {
-        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await res.json();
+      const found = data.find((t) => t.id == id);
+
+      if (found) {
+        setTask(found);
+        setText(found.text);
+        setCategory(found.category);
+        setDueDate(found.due_date || "");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const saveTask = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await fetch(`${API_URL}/api/tasks/${id}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          text,
-          category,
-          dueDate,
-        }),
+        body: JSON.stringify({ text, category, dueDate }),
       });
-
-      const data = await res.json();
 
       if (res.ok) {
         navigate("/list");
-      } else {
-        alert(data.error || "Failed to add task");
       }
     } catch (err) {
       console.error(err);
-      alert("Server error");
     }
   };
+
+  if (!task) {
+    return <div className="app">Loading...</div>;
+  }
 
   return (
     <div className="app">
       <ManaParticles />
-      <h1>Add New Task</h1>
+      <h1>Task Detail</h1>
 
       <div className="task-input">
         <input
           type="text"
-          placeholder="Enter task..."
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
@@ -79,12 +96,13 @@ function AddItem() {
           onChange={(e) => setDueDate(e.target.value)}
         />
 
-        <button onClick={addTask}>Save Task</button>
+        <p>Status: {task.completed ? "Completed" : "Active"}</p>
 
+        <button onClick={saveTask}>Save Changes</button>
         <button onClick={() => navigate("/list")}>Back</button>
       </div>
     </div>
   );
 }
 
-export default AddItem;
+export default Detail;
