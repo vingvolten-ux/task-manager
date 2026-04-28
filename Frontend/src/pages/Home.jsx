@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import ManaParticles from "../components/ManaParticles";
+import API_URL from "../api";
 
 function Home() {
   const navigate = useNavigate();
@@ -10,12 +11,12 @@ function Home() {
 
   const handleLogin = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
@@ -24,10 +25,10 @@ function Home() {
         localStorage.setItem("token", data.token);
         navigate("/list");
       } else {
-        alert(data.error);
+        alert(data.error || "Login failed");
       }
     } catch (err) {
-      alert("Login failed");
+      alert("Login failed. Please try again.");
     }
   };
 
@@ -37,7 +38,10 @@ function Home() {
 
       <div className="login-container">
         <h1>NIA</h1>
-        <p>Welcome back to your Neural Intelligence Assistant! Please login to your account to gain access to the full suite of features.</p>
+        <p>
+          Welcome back to your Neural Intelligence Assistant! Please login to
+          your account to gain access to the full suite of features.
+        </p>
 
         <input
           type="email"
@@ -54,6 +58,11 @@ function Home() {
         />
 
         <button onClick={handleLogin}>Login</button>
+
+        <p style={{ marginTop: "1rem" }}>
+          Don't have an account?{" "}
+          <Link to="/register">Register here</Link>
+        </p>
       </div>
     </>
   );
