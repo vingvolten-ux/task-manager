@@ -12,7 +12,7 @@ app.use(cors({
   origin: [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://task-manager-e82e59amg-vingvolten-uxs-projects.vercel.app"
+    "https://task-manager-d2fe.vercel.app"
   ],
   credentials: true
 }));
