@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ManaParticles from "../components/ManaParticles";
+import API_URL from "../api";
 
 function List() {
   const [tasks, setTasks] = useState([]);
@@ -19,7 +20,7 @@ function List() {
 
   const fetchTasks = async (token) => {
     try {
-      const res = await fetch("http://localhost:5000/api/tasks", {
+      const res = await fetch(`${API_URL}/api/tasks`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,7 +39,7 @@ function List() {
   const deleteTask = async (id) => {
     const token = localStorage.getItem("token");
 
-    await fetch(`http://localhost:5000/api/tasks/${id}`, {
+    await fetch(`${API_URL}/api/tasks/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -53,7 +54,7 @@ function List() {
 
     const task = tasks.find((t) => t.id === id);
 
-    await fetch(`http://localhost:5000/api/tasks/${id}`, {
+    await fetch(`${API_URL}/api/tasks/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -71,6 +72,11 @@ function List() {
     );
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   return (
     <div className="app">
       <ManaParticles />
@@ -83,9 +89,7 @@ function List() {
               onClick={() => toggleTask(task.id)}
               style={{
                 cursor: "pointer",
-                textDecoration: task.completed
-                  ? "line-through"
-                  : "none",
+                textDecoration: task.completed ? "line-through" : "none",
               }}
             >
               {task.text}
@@ -99,11 +103,16 @@ function List() {
               <button>View</button>
             </Link>
 
-            <button onClick={() => deleteTask(task.id)}>
-              Delete
-            </button>
+            <button onClick={() => deleteTask(task.id)}>Delete</button>
           </div>
         ))}
+      </div>
+
+      <div style={{ marginTop: "2rem" }}>
+        <button onClick={() => navigate("/add")}>+ Add Task</button>
+        <button onClick={handleLogout} style={{ marginLeft: "1rem" }}>
+          Logout
+        </button>
       </div>
     </div>
   );
