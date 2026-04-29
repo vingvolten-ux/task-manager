@@ -26,17 +26,20 @@ function Detail() {
 
     try {
       const res = await fetch(`${API_URL}/api/tasks`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       const data = await res.json();
+
       const found = data.find((t) => t.id == id);
 
       if (found) {
         setTask(found);
         setText(found.text);
         setCategory(found.category);
-        setDueDate(found.due_date || "");
+        setDueDate(found.dueDate || "");
       }
     } catch (err) {
       console.error(err);
@@ -48,12 +51,16 @@ function Detail() {
 
     try {
       const res = await fetch(`${API_URL}/api/tasks/${id}`, {
-        method: "PATCH",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ text, category, dueDate }),
+        body: JSON.stringify({
+          text,
+          category,
+          dueDate,
+        }),
       });
 
       if (res.ok) {
@@ -99,6 +106,7 @@ function Detail() {
         <p>Status: {task.completed ? "Completed" : "Active"}</p>
 
         <button onClick={saveTask}>Save Changes</button>
+
         <button onClick={() => navigate("/list")}>Back</button>
       </div>
     </div>
