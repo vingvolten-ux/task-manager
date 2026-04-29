@@ -5,6 +5,7 @@ import API_URL from "../api";
 
 function AddItem() {
   const navigate = useNavigate();
+
   const [text, setText] = useState("");
   const [category, setCategory] = useState("General");
   const [dueDate, setDueDate] = useState("");
@@ -29,7 +30,11 @@ function AddItem() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ text, category, dueDate }),
+        body: JSON.stringify({
+          text,
+          category,
+          dueDate,
+        }),
       });
 
       const data = await res.json();
@@ -75,6 +80,7 @@ function AddItem() {
         />
 
         <button onClick={addTask}>Save Task</button>
+
         <button onClick={() => navigate("/list")}>Back</button>
       </div>
     </div>
